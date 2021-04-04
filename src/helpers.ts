@@ -1,4 +1,4 @@
-import { Match, ParticipantResult } from 'brackets-model';
+import { Match, ParticipantResult } from './model';
 import { headers, abbreviations } from './lang';
 import { RankingHeader, Ranking, RankingFormula, RankingItem, RankingMap } from './types';
 

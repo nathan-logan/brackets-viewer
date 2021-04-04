@@ -1,4 +1,4 @@
-import { Stage, Match, MatchGame, Participant } from 'brackets-model';
+import { Stage, Match, MatchGame, Participant } from './model';
 import { BracketsViewer } from './main';
 import { locales } from './i18n';
 

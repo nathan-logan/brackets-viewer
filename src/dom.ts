@@ -1,4 +1,4 @@
-import { ParticipantResult } from 'brackets-model';
+import { ParticipantResult } from './model';
 import { rankingHeader } from './helpers';
 import { abbreviations } from './lang';
 import { Connection, FinalType, BracketType, Placement, Ranking, RankingItem } from './types';
@@ -16,7 +16,7 @@ export function createTitle(title: string): HTMLElement {
 
 /**
  * Creates a container which contains a round-robin stage.
- * 
+ *
  * @param stageId ID of the stage.
  */
 export function createRoundRobinContainer(stageId: number): HTMLElement {
@@ -28,7 +28,7 @@ export function createRoundRobinContainer(stageId: number): HTMLElement {
 
 /**
  * Creates a container which contains an elimination stage.
- * 
+ *
  * @param stageId ID of the stage.
  */
 export function createEliminationContainer(stageId: number): HTMLElement {

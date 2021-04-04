@@ -2,7 +2,7 @@ import i18next, { StringMap, TOptions } from 'i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
 import { locales } from './i18n';
 
-import { Status } from 'brackets-model';
+import { Status } from './model';
 import { isMajorRound } from './helpers';
 import { Locales, Locale, FinalType, BracketType, OriginHint, RankingHeaders, RankingHeader } from './types';
 
@@ -19,7 +19,7 @@ Object.keys(locales).forEach((lang: string) => i18next.addResourceBundle(lang, '
 
 /**
  * Returns an internationalized version of a locale key.
- * 
+ *
  * @param scope A locale scope.
  * @param key A locale key.
  * @param interpolations Data to pass to the i18n process.
@@ -28,7 +28,7 @@ function i18n<Scope extends keyof Locale>(scope: Scope, key: keyof Locale[Scope]
 
 /**
  * Returns an internationalized version of a locale key in an object.
- * 
+ *
  * @param scope A locale scope.
  * @param key A locale key.
  * @param returnObject Must be true.
@@ -37,7 +37,7 @@ function i18n<Scope extends keyof Locale>(scope: Scope, key: keyof Locale[Scope]
 
 /**
  * Returns an internationalized version of a locale key.
- * 
+ *
  * @param scope A locale scope.
  * @param key A locale key.
  * @param options Data to pass to the i18n process or a boolean.
@@ -231,7 +231,7 @@ export const abbreviations = {
 
 /**
  * The Best of X literal.
- * 
+ *
  * @param x Child count.
  */
 export const bestOfX = (x: number): string => i18n('common', 'best-of-x', { x });

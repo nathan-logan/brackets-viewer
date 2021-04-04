@@ -4,9 +4,6 @@
         "module": "CommonJS",
         "moduleResolution": "node",
         "strict": true,
-        "types": [
-            "brackets-model"
-        ],
         "esModuleInterop": true,
         "allowSyntheticDefaultImports": true,
         "resolveJsonModule": true,

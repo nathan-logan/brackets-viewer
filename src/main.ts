@@ -1,5 +1,5 @@
 import './style.scss';
-import { Participant, Match, ParticipantResult, Stage } from 'brackets-model';
+import { Participant, Match, ParticipantResult, Stage } from './model';
 import { splitBy, getRanking, getOriginAbbreviation, findRoot } from './helpers';
 import * as dom from './dom';
 import * as lang from './lang';
@@ -61,7 +61,7 @@ export class BracketsViewer {
 
     /**
      * Adds a locale to the available i18n bundles.
-     * 
+     *
      * @param name Name of the locale.
      * @param locale Contents of the locale.
      */
@@ -72,7 +72,7 @@ export class BracketsViewer {
 
     /**
      * Sets the images which will be rendered for every participant.
-     * 
+     *
      * @param images The participant images.
      */
     public setParticipantImages(images: ParticipantImage[]): void {
@@ -426,7 +426,7 @@ export class BracketsViewer {
 
     /**
      * Renders a participant image.
-     * 
+     *
      * @param nameContainer The name container.
      * @param participantId ID of the participant.
      */
