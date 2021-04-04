@@ -1,5 +1,5 @@
-import './style.scss';
-import { Participant, Match, ParticipantResult, Stage } from './model';
+import './styles/main.scss';
+import { Participant, Match, ParticipantResult, Stage, FFAMatch } from './models';
 import { splitBy, getRanking, getOriginAbbreviation, findRoot } from './helpers';
 import * as dom from './dom';
 import * as lang from './lang';
@@ -50,11 +50,16 @@ export class BracketsViewer {
 
         data.participants.forEach(participant => this.participantRefs[participant.id] = []);
 
-        data.stages.forEach(stage => this.renderStage(root, {
-            ...data,
-            stages: [stage],
-            matches: data.matches.filter(match => match.stage_id === stage.id),
-        }));
+        data.stages.forEach((stage) => {
+            // type assertion is needed here for the filter method
+            const matches = (data.matches as Array<Match|FFAMatch>).filter((match: Match|FFAMatch) => match.stage_id === stage.id);
+
+            this.renderStage(root, {
+                ...data,
+                stages: [stage],
+                matches,
+            });
+        });
 
         findRoot(config?.selector).append(root);
     }
@@ -80,24 +85,29 @@ export class BracketsViewer {
     }
 
     /**
-     * Renders a stage (round-robin, single or double elimination).
+     * Renders a stage (round-robin, single or double elimination, or ffa/elimination).
      *
      * @param root The root element.
      * @param data The data to display.
      */
     private renderStage(root: DocumentFragment, data: ViewerData): void {
         const stage = data.stages[0];
-        const matchesByGroup = splitBy(data.matches, 'group_id');
+        const matchesByGroup = splitBy<Match|FFAMatch>(data.matches, 'group_id');
 
         this.skipFirstRound = stage.settings.skipFirstRound || false;
 
+        // we apply type assertion in this switch in order to match the data to the required input params
+        // An other alternative is to replace instances of "Match|FFAMatch" types with "any"
         switch (stage.type) {
             case 'round_robin':
-                this.renderRoundRobin(root, stage, matchesByGroup);
+                this.renderRoundRobin(root, stage, (matchesByGroup as Match[][]));
                 break;
             case 'single_elimination':
             case 'double_elimination':
-                this.renderElimination(root, stage, matchesByGroup);
+                this.renderElimination(root, stage, (matchesByGroup as Match[][]));
+                break;
+            case 'ffa_elimination':
+                this.renderFFAElimination(root, stage, (matchesByGroup as FFAMatch[][]));
                 break;
             default:
                 throw Error(`Unknown bracket type: ${stage.type}`);
@@ -112,7 +122,7 @@ export class BracketsViewer {
      * @param matchesByGroup A list of matches for each group.
      */
     private renderRoundRobin(root: DocumentFragment, stage: Stage, matchesByGroup: Match[][]): void {
-        const container = dom.createRoundRobinContainer(stage.id);
+        const container = dom.createStageContainer(stage.id, 'round-robin');
         container.append(dom.createTitle(stage.name));
 
         let groupNumber = 1;
@@ -142,6 +152,49 @@ export class BracketsViewer {
     }
 
     /**
+     * Renders a FFA/Elimination stage.
+     *
+     * @param root The root element.
+     * @param stage The stage to render.
+     * @param matchesByGroup A list of matches for each group.
+     */
+    private renderFFAElimination(root: DocumentFragment, stage: Stage, matchesByGroup: FFAMatch[][]): void {
+        const container = dom.createStageContainer(stage.id, 'ffa-elimination');
+        container.append(dom.createTitle(stage.name));
+        const groupWrapper = document.createElement('div');
+        groupWrapper.classList.add('group__wrapper');
+        container.append(groupWrapper);
+
+        let groupNumber = 1;
+
+        for (const groupMatches of matchesByGroup) {
+            const groupId = groupMatches[0].group_id;
+            const groupContainer = dom.createGroupContainer(groupId, lang.getGroupName(groupNumber++));
+            const matchesByRound = splitBy(groupMatches, 'round_id');
+
+            let roundNumber = 1;
+
+            const roundWrapper = document.createElement('div');
+            roundWrapper.classList.add('round__wrapper');
+
+            for (const roundMatches of matchesByRound) {
+                const roundId = roundMatches[0].round_id;
+                const roundContainer = dom.createRoundContainer(roundId, lang.getRoundName(roundNumber++, 0));
+
+                for (const match of roundMatches)
+                    roundContainer.append(this.createFFAMatch(match));
+
+                roundWrapper.append(roundContainer);
+            }
+            groupContainer.append(roundWrapper);
+            // groupContainer.append(this.createRanking(groupMatches));
+            groupWrapper.append(groupContainer);
+        }
+
+        root.append(container);
+    }
+
+    /**
      * Renders an elimination stage (single or double).
      *
      * @param root The root element.
@@ -149,7 +202,7 @@ export class BracketsViewer {
      * @param matchesByGroup A list of matches for each group.
      */
     private renderElimination(root: DocumentFragment, stage: Stage, matchesByGroup: Match[][]): void {
-        const container = dom.createEliminationContainer(stage.id);
+        const container = dom.createStageContainer(stage.id, 'elimination');
         container.append(dom.createTitle(stage.name));
 
         if (stage.type === 'single_elimination')
@@ -205,7 +258,7 @@ export class BracketsViewer {
     private renderBracket(container: HTMLElement, matchesByRound: Match[][], roundName: RoundName, bracketType: BracketType, connectFinal?: boolean): void {
         const groupId = matchesByRound[0][0].group_id;
         const roundCount = matchesByRound.length;
-        const bracketContainer = dom.createBracketContainer(groupId);
+        const bracketContainer = dom.createStageContainer(groupId, 'bracket');
 
         let roundNumber = 1;
 
@@ -360,6 +413,40 @@ export class BracketsViewer {
             opponents.append(dom.createChildCountLabel(lang.bestOfX(match.child_count)));
 
         opponents.append(participant1, participant2);
+        matchContainer.append(opponents);
+
+        if (!connection)
+            return matchContainer;
+
+        dom.setupConnection(opponents, matchContainer, connection);
+
+        return matchContainer;
+    }
+
+    /**
+     * Creates a match based on its results.
+     *
+     * @param match Results of the match.
+     * @param matchLocation Location of the match.
+     * @param connection Connection of this match with the others.
+     * @param label Label of the match.
+     * @param originHint Origin hint for the match.
+     * @param roundNumber Number of the round.
+     */
+    private createFFAMatch(match: FFAMatch, matchLocation?: BracketType, connection?: Connection, label?: string, originHint?: OriginHint, roundNumber?: number): HTMLElement {
+        const matchContainer = dom.createFFAMatchContainer(match.id, match.status);
+        const opponents = dom.createOpponentsContainer();
+        const participants:HTMLElement[] = [];
+        // display the participants
+        if (match.participants.length > 0) {
+            match.participants.forEach((participant) => {
+                console.log('participant: ', participant);
+                const participantElement = this.createParticipant(participant, originHint, matchLocation, roundNumber);
+                participants.push(participantElement);
+            });
+        }
+
+        opponents.append(...participants);
         matchContainer.append(opponents);
 
         if (!connection)

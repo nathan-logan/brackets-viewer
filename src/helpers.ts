@@ -1,4 +1,4 @@
-import { Match, ParticipantResult } from './model';
+import { Match, ParticipantResult } from './models';
 import { headers, abbreviations } from './lang';
 import { RankingHeader, Ranking, RankingFormula, RankingItem, RankingMap } from './types';
 

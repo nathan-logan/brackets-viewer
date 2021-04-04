@@ -11,7 +11,7 @@
  /**
   * The only supported types of stage.
   */
- export declare type StageType = 'round_robin' | 'single_elimination' | 'double_elimination';
+ export declare type StageType = 'round_robin' | 'single_elimination' | 'double_elimination' | 'ffa_elimination';
  /**
   * Used to create a stage.
   */
@@ -194,6 +194,15 @@
      number: number;
  }
  /**
+  * Only contains information about an FFA/Elimination match status and results.
+  */
+ export interface FFAMatchResults {
+     /** Status of the match. */
+     status: Status;
+     /** The participants of the match. */
+     participants: ParticipantResult[];
+ }
+ /**
   * Only contains information about match status and results.
   */
  export interface MatchResults {
@@ -220,6 +229,21 @@
      number: number;
      /** The count of match games this match has. Can be `0` if it's a simple match, or a positive number for "Best Of" matches. */
      child_count: number;
+ }
+ /**
+  * A match of a round.
+  */
+ export interface FFAMatch extends FFAMatchResults {
+     /** ID of the match. */
+     id: number;
+     /** ID of the parent stage. */
+     stage_id: number;
+     /** ID of the parent group. */
+     group_id: number;
+     /** ID of the parent round. */
+     round_id: number;
+     /** The number of the match in its round. */
+     number: number;
  }
  /**
   * A game of a match.

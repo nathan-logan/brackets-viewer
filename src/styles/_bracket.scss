@@ -1,0 +1,16 @@
+.brackets-viewer .bracket {
+  display: flex;
+
+  &:not(:last-of-type) {
+    margin-bottom: 15px;
+  }
+
+  .round {
+    display: flex;
+    flex-direction: column;
+
+    &:not(:last-of-type) {
+      margin-right: var(--round-margin);
+    }
+  }
+}

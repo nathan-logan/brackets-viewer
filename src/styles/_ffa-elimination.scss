@@ -1,0 +1,83 @@
+.brackets-viewer .ffa-elimination {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  row-gap: 24px;
+
+  h1 {
+    flex-basis: 100%;
+  }
+
+  h2 {
+    text-align: center;
+  }
+
+  .group {
+    &__wrapper {
+      display: flex;
+      flex-direction: column;
+    }
+
+    &:not(:last-of-type) {
+      // margin-right: var(--round-margin);
+      margin-bottom: 24px;
+    }
+
+    h2 {
+      margin: 0 0 25px 0;
+    }
+
+    table {
+      margin: 30px 0 20px 0;
+      color: #a7a7a7;
+      border-collapse: collapse;
+    }
+
+    th {
+      font-weight: normal;
+      text-align: start;
+      cursor: help;
+      border-bottom: $match-border;
+    }
+
+    td.hover {
+      background: #eceff1 !important;
+    }
+
+    th,
+    td {
+      padding: 5px;
+    }
+
+    td {
+      &:nth-of-type(2),
+      &:last-of-type {
+        color: black;
+        font-weight: 500;
+      }
+    }
+  }
+
+  .round {
+    &__wrapper {
+      display: flex;
+      flex-wrap: wrap;
+    }
+    width: fit-content;
+
+    &:not(:last-of-type) {
+      margin-right: var(--round-margin);
+    }
+  }
+
+  .participant {
+    display: flex;
+    justify-content: space-between;
+    padding: 2px 8px;
+    background: var(--match-background);
+
+    &:nth-of-type(2) {
+      padding-bottom: 0;
+    }
+  }
+}

@@ -6,12 +6,9 @@
     <link rel="stylesheet" href="../dist/brackets-viewer.min.css" />
     <script type="text/javascript" src="../dist/brackets-viewer.min.js"></script>
 
-    <!-- You can choose a default theme or make you own. -->
-    <link rel="stylesheet" href="themes/light.css" />
-
 </head>
 
-<body style="background: gray;">
+<body style="background: #212529;">
 
     <!-- This div will be used as the root for the library. It must be **perfectly** empty to prevent a FOUC. -->
     <div id="example" class="brackets-viewer"></div>
@@ -19,16 +16,8 @@
     <script>
         (async function () {
             const data = await fetch('http://localhost:3000/db')
-                .catch(() => alert('Failed to fetch localhost. Please do `npm run db` or use json-server your own way.'))
+                .catch((err) => alert(`Failed to fetch localhost. Try "npm run db" - msg: ${err.message}`))
                 .then(res => res.json());
-
-            // You can manually add locales. English will be used as a fallback if keys are missing.
-            // You can force browser language detection by setting the `i18nextLng` property to a locale key (ex: 'ru') in the localStorage.
-            bracketsViewer.addLocale('ru', {
-                "origin-hint": {
-                    "seed": "семя {{position}}",
-                }
-            });
 
             // This is optional. You must do it before render().
             bracketsViewer.setParticipantImages(data.participant.map(participant => ({

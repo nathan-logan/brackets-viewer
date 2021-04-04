@@ -1,4 +1,4 @@
-import { ParticipantResult } from './model';
+import { ParticipantResult } from './models';
 import { rankingHeader } from './helpers';
 import { abbreviations } from './lang';
 import { Connection, FinalType, BracketType, Placement, Ranking, RankingItem } from './types';
@@ -15,39 +15,16 @@ export function createTitle(title: string): HTMLElement {
 }
 
 /**
- * Creates a container which contains a round-robin stage.
+ * Creates a container which contains a stage.
  *
  * @param stageId ID of the stage.
+ * @param stageType Type of the stage
  */
-export function createRoundRobinContainer(stageId: number): HTMLElement {
+export function createStageContainer(stageId: number, stageType:string): HTMLElement {
     const stage = document.createElement('div');
-    stage.classList.add('round-robin');
+    stage.classList.add(stageType);
     stage.setAttribute('data-stage-id', stageId.toString());
     return stage;
-}
-
-/**
- * Creates a container which contains an elimination stage.
- *
- * @param stageId ID of the stage.
- */
-export function createEliminationContainer(stageId: number): HTMLElement {
-    const stage = document.createElement('div');
-    stage.classList.add('elimination');
-    stage.setAttribute('data-stage-id', stageId.toString());
-    return stage;
-}
-
-/**
- * Creates a container which contains one bracket of a single or double elimination.
- *
- * @param groupId ID of the group.
- */
-export function createBracketContainer(groupId: number): HTMLElement {
-    const bracket = document.createElement('section');
-    bracket.classList.add('bracket');
-    bracket.setAttribute('data-group-id', groupId.toString());
-    return bracket;
 }
 
 /**
@@ -93,6 +70,20 @@ export function createRoundContainer(roundId: number, title: string): HTMLElemen
 export function createMatchContainer(matchId: number, status: number): HTMLElement {
     const match = document.createElement('div');
     match.classList.add('match');
+    match.setAttribute('data-match-id', matchId.toString());
+    match.setAttribute('data-match-status', status.toString());
+    return match;
+}
+
+/**
+ * Creates a container which contains a match.
+ *
+ * @param matchId ID of the match.
+ * @param status Status of the match.
+ */
+export function createFFAMatchContainer(matchId: number, status: number): HTMLElement {
+    const match = document.createElement('div');
+    match.classList.add('ffa-match');
     match.setAttribute('data-match-id', matchId.toString());
     match.setAttribute('data-match-status', status.toString());
     return match;

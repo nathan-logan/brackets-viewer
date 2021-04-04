@@ -2,7 +2,7 @@ import i18next, { StringMap, TOptions } from 'i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
 import { locales } from './i18n';
 
-import { Status } from './model';
+import { Status } from './models';
 import { isMajorRound } from './helpers';
 import { Locales, Locale, FinalType, BracketType, OriginHint, RankingHeaders, RankingHeader } from './types';
 

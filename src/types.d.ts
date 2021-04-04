@@ -1,4 +1,4 @@
-import { Stage, Match, MatchGame, Participant } from './model';
+import { Stage, Match, MatchGame, Participant, FFAMatch } from './models';
 import { BracketsViewer } from './main';
 import { locales } from './i18n';
 
@@ -16,7 +16,7 @@ export interface ViewerData {
     stages: Stage[],
 
     /** The matches of the stage to display. */
-    matches: Match[],
+    matches: (Match | FFAMatch)[],
 
     /** The games of the matches to display. */
     matchGames: MatchGame[],
