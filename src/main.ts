@@ -106,8 +106,8 @@ export class BracketsViewer {
             case 'double_elimination':
                 this.renderElimination(root, stage, (matchesByGroup as Match[][]));
                 break;
-            case 'ffa_elimination':
-                this.renderFFAElimination(root, stage, (matchesByGroup as FFAMatch[][]));
+            case 'free-for-all':
+                this.renderFreeForAll(root, stage, (matchesByGroup as FFAMatch[][]));
                 break;
             default:
                 throw Error(`Unknown bracket type: ${stage.type}`);
@@ -152,42 +152,42 @@ export class BracketsViewer {
     }
 
     /**
-     * Renders a FFA/Elimination stage.
+     * Renders a free for all stage.
      *
      * @param root The root element.
      * @param stage The stage to render.
      * @param matchesByGroup A list of matches for each group.
      */
-    private renderFFAElimination(root: DocumentFragment, stage: Stage, matchesByGroup: FFAMatch[][]): void {
-        const container = dom.createStageContainer(stage.id, 'ffa-elimination');
+    private renderFreeForAll(root: DocumentFragment, stage: Stage, matchesByGroup: FFAMatch[][]): void {
+        const container = dom.createStageContainer(stage.id, 'free-for-all');
         container.append(dom.createTitle(stage.name));
+
         const groupWrapper = document.createElement('div');
         groupWrapper.classList.add('group__wrapper');
         container.append(groupWrapper);
 
         let groupNumber = 1;
-
         for (const groupMatches of matchesByGroup) {
             const groupId = groupMatches[0].group_id;
             const groupContainer = dom.createGroupContainer(groupId, lang.getGroupName(groupNumber++));
             const matchesByRound = splitBy(groupMatches, 'round_id');
-
-            let roundNumber = 1;
-
             const roundWrapper = document.createElement('div');
             roundWrapper.classList.add('round__wrapper');
 
+            let roundNumber = 1;
+
             for (const roundMatches of matchesByRound) {
                 const roundId = roundMatches[0].round_id;
-                const roundContainer = dom.createRoundContainer(roundId, lang.getRoundName(roundNumber++, 0));
+                const roundContainer = dom.createRoundContainer(roundId, `Game ${roundNumber++}`);
 
                 for (const match of roundMatches)
                     roundContainer.append(this.createFFAMatch(match));
 
+
                 roundWrapper.append(roundContainer);
             }
+
             groupContainer.append(roundWrapper);
-            // groupContainer.append(this.createRanking(groupMatches));
             groupWrapper.append(groupContainer);
         }
 
@@ -440,10 +440,16 @@ export class BracketsViewer {
         // display the participants
         if (match.participants.length > 0) {
             match.participants.forEach((participant) => {
-                console.log('participant: ', participant);
                 const participantElement = this.createParticipant(participant, originHint, matchLocation, roundNumber);
                 participants.push(participantElement);
             });
+        }
+
+        for (let i = participants.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            const temp = participants[i];
+            participants[i] = participants[j];
+            participants[j] = temp;
         }
 
         opponents.append(...participants);
@@ -474,8 +480,10 @@ export class BracketsViewer {
 
         if (participant === null)
             containers.name.innerText = lang.BYE;
-        else
+        else {
+            console.log('rendering participant');
             this.renderParticipant(containers, participant, originHint, matchLocation, roundNumber);
+        }
 
         containers.participant.append(containers.name, containers.result);
 
@@ -553,7 +561,9 @@ export class BracketsViewer {
         if (!this.config.showLowerBracketSlotsOrigin && matchLocation === 'loser-bracket') return;
 
         const abbreviation = getOriginAbbreviation(matchLocation, this.skipFirstRound, roundNumber);
+        console.log('abbreviation: ', abbreviation);
         const origin = abbreviation + participant.position;
+        console.log('origin: ', origin);
         dom.addParticipantOrigin(nameContainer, origin, this.config.participantOriginPlacement);
     }
 

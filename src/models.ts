@@ -11,7 +11,7 @@
  /**
   * The only supported types of stage.
   */
- export declare type StageType = 'round_robin' | 'single_elimination' | 'double_elimination' | 'ffa_elimination';
+ export declare type StageType = 'round_robin' | 'single_elimination' | 'double_elimination' | 'free-for-all';
  /**
   * Used to create a stage.
   */

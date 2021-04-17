@@ -51,13 +51,13 @@ export function createGroupContainer(groupId: number, title: string): HTMLElemen
  * @param title Title of the round.
  */
 export function createRoundContainer(roundId: number, title: string): HTMLElement {
-    const h3 = document.createElement('h3');
-    h3.innerText = title;
+    const roundTitle = document.createElement('h3');
+    roundTitle.innerText = title;
 
     const round = document.createElement('article');
     round.classList.add('round');
     round.setAttribute('data-round-id', roundId.toString());
-    round.append(h3);
+    round.append(roundTitle);
     return round;
 }
 

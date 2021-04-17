@@ -30,16 +30,13 @@
         {
             "id": 0,
             "tournament_id": 0,
-            "name": "Example",
-            "type": "ffa_elimination",
+            "name": "Mario Kart Thingy",
+            "type": "free-for-all",
             "number": 1,
             "settings": {
                 "size": 16,
                 "seedOrdering": [
-                    "natural",
-                    "natural",
-                    "reverse_half_shift",
-                    "reverse"
+                    "natural"
                 ],
                 "grandFinal": "double",
                 "matchesChildCount": 0
@@ -180,6 +177,68 @@
         },
         {
             "id": 0,
+            "number": 1,
+            "stage_id": 0,
+            "group_id": 0,
+            "round_id": 2,
+            "child_count": 0,
+            "status": 3,
+            "participants": [
+                {
+                    "id": 0,
+                    "score": 16
+                },
+                {
+                    "id": 1,
+                    "score": 12
+                },
+                {
+                    "id": 2,
+                    "score": 5
+                },
+                {
+                    "id": 3,
+                    "score": 1
+                },
+                {
+                    "id": 4,
+                    "score": 0
+                }
+            ]
+        },
+        {
+            "id": 0,
+            "number": 1,
+            "stage_id": 0,
+            "group_id": 0,
+            "round_id": 3,
+            "child_count": 0,
+            "status": 3,
+            "participants": [
+                {
+                    "id": 0,
+                    "score": 16
+                },
+                {
+                    "id": 1,
+                    "score": 12
+                },
+                {
+                    "id": 2,
+                    "score": 5
+                },
+                {
+                    "id": 3,
+                    "score": 1
+                },
+                {
+                    "id": 4,
+                    "score": 0
+                }
+            ]
+        },
+        {
+            "id": 0,
             "number": 2,
             "stage_id": 0,
             "group_id": 1,
@@ -206,6 +265,68 @@
                 {
                     "id": 4,
                     "score": 12
+                }
+            ]
+        },
+        {
+            "id": 0,
+            "number": 1,
+            "stage_id": 0,
+            "group_id": 1,
+            "round_id": 2,
+            "child_count": 0,
+            "status": 3,
+            "participants": [
+                {
+                    "id": 0,
+                    "score": 16
+                },
+                {
+                    "id": 1,
+                    "score": 12
+                },
+                {
+                    "id": 2,
+                    "score": 5
+                },
+                {
+                    "id": 3,
+                    "score": 1
+                },
+                {
+                    "id": 4,
+                    "score": 0
+                }
+            ]
+        },
+        {
+            "id": 0,
+            "number": 1,
+            "stage_id": 0,
+            "group_id": 1,
+            "round_id": 3,
+            "child_count": 0,
+            "status": 3,
+            "participants": [
+                {
+                    "id": 0,
+                    "score": 16
+                },
+                {
+                    "id": 1,
+                    "score": 12
+                },
+                {
+                    "id": 2,
+                    "score": 5
+                },
+                {
+                    "id": 3,
+                    "score": 1
+                },
+                {
+                    "id": 4,
+                    "score": 0
                 }
             ]
         }

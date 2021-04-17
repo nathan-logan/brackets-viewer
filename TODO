@@ -2,6 +2,8 @@
 
 FFA Elimination Bracket:
   View:
-    ☐ Change matches container to list of participants
+    ✔ Change matches container to list of participants
+    ✔ Rename round to matches for free-for-all brackets
+    ☐ Sort by seeding and show their seed beside the name?
   Configuration:
   Score Reporting:
